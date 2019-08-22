@@ -12,13 +12,15 @@ import os
 import urllib.request
 import gzip
 from urllib.parse import urljoin
+from pomodules import BASE_URL
 
 class UrlReader(object):
     """Fetches and returns data from the PegelOnline Server in different formats
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, url):
+        self.url = str(url)
+
 
 
     def openUrl(self):
@@ -33,18 +35,18 @@ class UrlReader(object):
             HTTPError: An error occured during the communication
         """
 
-        url = urljoin("https://www.pegelonline.wsv.de/webservices/rest-api/v2/", "stations.json")
-        req = urllib.request.Request(url)
+        reqUrl = urljoin(BASE_URL, self.url)
+        req = urllib.request.Request(reqUrl)
         req.add_header('Accept-Encoding', 'gzip')
 
         try:
-            return urllib.request.urlopen(req)
-
+            request = urllib.request.urlopen(req)
         except urllib.error.URLError as e:
             print(e.reason)
         except urllib.error.HTTPError as e:
             print(e.code)
-
+        else:
+            return request
 
     def getDataResponse(self):
         """Unzips and returns data received from openUrl if present
@@ -56,11 +58,12 @@ class UrlReader(object):
         """
         response = self.openUrl()
 
-        if not (response is None and response.headers['Content-Encoding'] == 'gzip') :
+        if (response.headers['Content-Encoding'] == 'gzip') :
             data = gzip.GzipFile(fileobj=response).read()
+            print("Loaded")
             return data
-        else:
-            return None
+
+        return response.read()
 
 
     def getJsonResponse(self):
