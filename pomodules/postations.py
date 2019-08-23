@@ -7,7 +7,7 @@
 # Created:     21.08.2019
 #-------------------------------------------------------------------------------
 
-from pomodules.urlreader import UrlReader
+from .pomodules.urlreader import UrlReader
 
 
 class PoStations(object):
@@ -52,11 +52,11 @@ class PoStations(object):
                     d['longitude']  if "longitude" in d else 0 ,
                     d['latitude']   if "latitude" in d else 0
                     ),
-                'attributes': ( d['uuid']   if "uuid" in d else 0,
+                'attributes': ( d['uuid'] if "uuid" in d else 0,
                                 d['number'] if "number" in d else 0,
-                                d['shortname']  if "shortname" in d else "",
-                                d['longname']   if "longname" in d else "",
-                                d['km']     if "km" in d else 0.0,
+                                d['shortname'] if "shortname" in d else "",
+                                d['longname'] if "longname" in d else "",
+                                d['km'] if "km" in d else 0.0,
                                 d['agency'] if "agency" in d else "",
                                 d['water']['longname'] if "water" in d else ""
                               )

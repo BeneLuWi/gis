@@ -12,7 +12,7 @@ import os
 import urllib.request
 import gzip
 from urllib.parse import urljoin
-from pomodules import BASE_URL
+from . import BASE_URL
 
 class UrlReader(object):
     """Fetches and returns data from the PegelOnline Server in different formats
