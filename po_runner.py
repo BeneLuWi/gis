@@ -11,7 +11,10 @@
 
 from .pomodules.poqgsstations import PoQgsStations
 #from .pomodules.poqgscurrentw import PoQgsCurrentW
+from .pomodules.urlreader import UrlReader
 
+from urllib.parse import quote
+from PyQt5 import QtGui
 import os
 
 class PoRunner(object):
@@ -19,9 +22,25 @@ class PoRunner(object):
     def __init__(self, ui, iface):
         self.ui = ui
         self.iface = iface
+        self.initUi()
 
 
-    def show_basemap():
+    def initUi(self):
+
+        self.init_connects()
+
+        ur = UrlReader("stations")
+        data = ur.getJsonResponse()
+        self.setStations(data)
+
+
+
+
+    def init_connects(self):
+        #self.ui.cbBasemap.toggled.connect(self.doBasemapOptionChanged)
+        self.ui.pbLoad.clicked.connect(self.doLoadGraph)
+
+    def show_basemap(self):
         local_dir = os.path.join(__file__, "basemap")
         water_lines = os.path.join(local_dir, "waters.gpkg|layername=water_l")
         water_areas = os.path.join(local_dir, "waters.gpkg|layername=water_f")
@@ -66,13 +85,13 @@ class PoRunner(object):
             None
         """
         # Anzahl der Tage in der SpinBox
-        days = days = self.sbDays.value()
+        days = days = self.ui.sbDays.value()
         # Name der Station aus der ComboBox
-        station = self.comboBox.currentText() # benutze quote() für die url
+        station = self.ui.cbStations.currentText() # benutze quote() für die url
         print("Lade den Graphen")
         # url zusammenbauen
 
-        requestUrl = "stations/" + station + "/W/measurements.png?start=P" + str(days) + "D"
+        requestUrl = "stations/" + quote(station) + "/W/measurements.png?start=P" + str(days) + "D"
 
         # Urlreader mit getDataResponse
         ur1 = UrlReader(requestUrl)
@@ -81,6 +100,8 @@ class PoRunner(object):
         # Fehler-Code abfragen (es gibt Stationen ohne Wasserstandsdaten)
 
         if img_data is None:
+            self.ui.lbGraph.clear()
+            self.ui.lbGraph.setText("Graph konnte nicht geladen werden.")
             return
         # wenn ok, dann Graphik einsetzen
         pixmap = QtGui.QPixmap()

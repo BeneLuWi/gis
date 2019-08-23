@@ -20,6 +20,7 @@ class UrlReader(object):
 
     def __init__(self, url):
         self.url = str(url)
+        print(self.url)
 
 
 
@@ -34,6 +35,8 @@ class UrlReader(object):
             URLError: An error occured when the URL cant be reached
             HTTPError: An error occured during the communication
         """
+
+
 
         reqUrl = urljoin(BASE_URL, self.url)
         req = urllib.request.Request(reqUrl)
@@ -57,6 +60,9 @@ class UrlReader(object):
             data: Raw unzipped data
         """
         response = self.openUrl()
+
+        if response is None:
+            return
 
         if (response.headers['Content-Encoding'] == 'gzip') :
             data = gzip.GzipFile(fileobj=response).read()

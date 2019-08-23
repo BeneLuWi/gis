@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>340</width>
-    <height>165</height>
+    <width>325</width>
+    <height>144</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,12 +15,6 @@
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="2" column="0">
-     <layout class="QVBoxLayout" name="verticalLayout"/>
-    </item>
-    <item row="3" column="0">
-     <layout class="QVBoxLayout" name="verticalLayout_2"/>
-    </item>
     <item row="4" column="0">
      <layout class="QVBoxLayout" name="vlayout_graph">
       <property name="spacing">
@@ -90,9 +84,33 @@
        </spacer>
       </item>
       <item>
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="lbGraph">
         <property name="text">
-         <string>Graph</string>
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="0">
+     <layout class="QVBoxLayout" name="vlayout_layers"/>
+    </item>
+    <item row="3" column="0">
+     <layout class="QVBoxLayout" name="vlayout_map">
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="lbBasemap">
+        <property name="text">
+         <string>Basiskarte</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="cbBasemap">
+        <property name="text">
+         <string>Basiskarte anzeigen</string>
         </property>
        </widget>
       </item>

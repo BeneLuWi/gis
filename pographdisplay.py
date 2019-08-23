@@ -11,7 +11,7 @@ import sys
 from PyQt5.QtWidgets import (QWidget,
                             QApplication)
 from PyQt5 import QtCore, QtGui, QtWidgets
-from pomodules.urlreader import UrlReader
+from .pomodules.urlreader import UrlReader
 from urllib.parse import urljoin
 
 class PoGraphDisplay(QWidget):
