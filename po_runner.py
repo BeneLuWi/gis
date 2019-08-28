@@ -16,50 +16,111 @@ from .pomodules.urlreader import UrlReader
 from urllib.parse import quote
 from PyQt5 import QtGui
 import os
+from qgis.core import  (QgsVectorLayer,
+                        QgsProject,
+                        QgsLayerTreeLayer)
+
 
 class PoRunner(object):
-
+    """
+    """
     def __init__(self, ui, iface):
         self.ui = ui
         self.iface = iface
+        self.layers = dict.fromkeys(["water_lines", "water_areas"])
         self.initUi()
 
 
     def initUi(self):
+        """
 
-        self.init_connects()
+        Args:
+            None
+        Returns:
+            None
+        """
+
+        self.initConnects()
 
         ur = UrlReader("stations")
         data = ur.getJsonResponse()
         self.setStations(data)
 
+        self.local_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "basemap")
 
 
 
-    def init_connects(self):
-        #self.ui.cbBasemap.toggled.connect(self.doBasemapOptionChanged)
+    def initConnects(self):
+        """
+
+        Args:
+            None
+        Returns:
+            None
+        """
+        self.ui.cbBasemap.toggled.connect(self.showBasemap)
         self.ui.pbLoad.clicked.connect(self.doLoadGraph)
 
-    def show_basemap(self):
-        local_dir = os.path.join(__file__, "basemap")
-        water_lines = os.path.join(local_dir, "waters.gpkg|layername=water_l")
-        water_areas = os.path.join(local_dir, "waters.gpkg|layername=water_f")
+    def showBasemap(self):
+        """
 
-        vlayer = QgsVectorLayer(water_lines, "Flüsse", "ogr")
-        if not vlayer.isValid():
-            print("Layer '%s' not valid"%water_lines)
-            return
-        QgsProject.instance().addMapLayer(vlayer, False)
-        layerTree = iface.layerTreeCanvasBridge().rootGroup()
-        layerTree.insertChildNode(-1, QgsLayerTreeLayer(vlayer))
+        Args:
+            None
+        Returns:
+            None
+        """
 
-        vlayer = QgsVectorLayer(water_areas, "Gewässer", "ogr")
-        if not vlayer.isValid():
-            print("Layer '%s' not valid"%water_areas)
-            return
-        QgsProject.instance().addMapLayer(vlayer, False)
-        layerTree = iface.layerTreeCanvasBridge().rootGroup()
-        layerTree.insertChildNode(-1, QgsLayerTreeLayer(vlayer))
+        # Create the layers only if clicked to improve loading time of the plugin
+        if self.ui.cbBasemap.isChecked() == True:
+            if self.layers["water_lines"] is None:
+                water_lines = os.path.join(self.local_dir, "waters.gpkg|layername=water_l")
+
+                vlayer = QgsVectorLayer(water_lines, "Flüsse", "ogr")
+                if not vlayer.isValid():
+                    print("Layer '%s' not valid"%water_lines)
+                    return
+                self.layers["water_lines"] = vlayer
+                self.layers["water_lines"].willBeDeleted.connect(self.doDisconnectWaterLines)
+                QgsProject.instance().addMapLayer(vlayer, False)
+                layerTree = self.iface.layerTreeCanvasBridge().rootGroup()
+                layerTree.insertChildNode(-1, QgsLayerTreeLayer(vlayer))
+
+            if self.layers["water_areas"] is None:
+                water_areas = os.path.join(self.local_dir, "waters.gpkg|layername=water_f")
+
+                vlayer = QgsVectorLayer(water_areas, "Gewässer", "ogr")
+                if not vlayer.isValid():
+                    print("Layer '%s' not valid"%water_areas)
+                    return
+                self.layers["water_areas"] = vlayer
+                self.layers["water_areas"].willBeDeleted.connect(self.doDisconnectWaterAreas)
+                QgsProject.instance().addMapLayer(vlayer, False)
+                layerTree = self.iface.layerTreeCanvasBridge().rootGroup()
+                layerTree.insertChildNode(-1, QgsLayerTreeLayer(vlayer))
+
+            # Make the layers visible
+            (QgsProject.instance()
+                .layerTreeRoot()
+                .findLayer(self.layers["water_lines"].id())
+                .setItemVisibilityChecked(True))
+
+            (QgsProject.instance()
+                .layerTreeRoot()
+                .findLayer(self.layers["water_areas"].id())
+                .setItemVisibilityChecked(True))
+
+
+        else:
+            if not (self.layers["water_lines"] is None):
+                (QgsProject.instance()
+                    .layerTreeRoot()
+                    .findLayer(self.layers["water_lines"].id())
+                    .setItemVisibilityChecked(False))
+            if not (self.layers["water_areas"] is None):
+                (QgsProject.instance()
+                    .layerTreeRoot()
+                    .findLayer(self.layers["water_areas"].id())
+                    .setItemVisibilityChecked(False))
 
     def setStations(self, stations):
         """
@@ -77,6 +138,7 @@ class PoRunner(object):
         self.ui.cbStations.setCurrentIndex(0)
 
     def doLoadGraph(self):
+
         """
 
         Args:
@@ -108,3 +170,9 @@ class PoRunner(object):
         pixmap.loadFromData(img_data) # img_data als Ergebnis von getDataResponse
         self.ui.lbGraph.setPixmap(pixmap)
         self.ui.lbGraph.resize(pixmap.width(), pixmap.height())
+
+    def doDisconnectWaterLines(self):
+        self.layers["water_lines"] = None
+
+    def doDisconnectWaterAreas(self):
+        self.layers["water_areas"] = None
