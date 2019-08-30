@@ -10,7 +10,7 @@
 from pomodules.urlreader import UrlReader
 
 
-class PoStations(object):
+class PoCurrentW(object):
     """
     """
 
@@ -40,7 +40,7 @@ class PoStations(object):
         """
 
 
-        reader = UrlReader("stations.json")
+        reader = UrlReader("stations.json?timeseries=W&includeTimeseries=true&includeCurrentMeasurement=true")
         jsonData = reader.getJsonResponse()
 
         stations = []
@@ -55,11 +55,11 @@ class PoStations(object):
                 'attributes': ( d['uuid'] if "uuid" in d else 0,
                                 d['number'] if "number" in d else 0,
                                 d['shortname'] if "shortname" in d else "",
-                                d['longname'] if "longname" in d else "",
-                                d['km'] if "km" in d else 0.0,
-                                d['agency'] if "agency" in d else "",
-                                d['water']['longname'] if "water" in d else ""
-                              )
+                                d['timeseries'][0]['currentMeasurement']['timestamp'],
+                                d['timeseries'][0]['currentMeasurement']['value'],
+                                d['timeseries'][0]['currentMeasurement']['trend'],
+                                d['timeseries'][0]['currentMeasurement']['stateMnwMhw'],
+                                d['timeseries'][0]['currentMeasurement']['stateNswHsw'])
             }
 
             stations.append(station)

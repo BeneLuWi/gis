@@ -172,7 +172,7 @@ class PegelOnlineDisplayer:
         icon_path = ':/plugins/pegel_online_displayer/icon.png'
         self.add_action(
             icon_path,
-            text=self.tr(u''),
+            text=self.tr(u'Dock-Widget anzeigen'),
             callback=self.run,
             parent=self.iface.mainWindow())
 

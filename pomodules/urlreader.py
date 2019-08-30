@@ -20,9 +20,6 @@ class UrlReader(object):
 
     def __init__(self, url):
         self.url = str(url)
-        print(self.url)
-
-
 
     def openUrl(self):
         """Creates and executes HTTP-request

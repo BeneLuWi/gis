@@ -5,13 +5,11 @@
 # Author:      bluek
 #
 # Created:     23.08.2019
-# Copyright:   (c) bluek 2019
-# Licence:     <your licence>
 #-------------------------------------------------------------------------------
 
-from .pomodules.poqgsstations import PoQgsStations
-#from .pomodules.poqgscurrentw import PoQgsCurrentW
-from .pomodules.urlreader import UrlReader
+from pomodules.poqgsstations import PoQgsStations
+from pomodules.poqgscurrentw import PoQgsCurrentW
+from pomodules.urlreader import UrlReader
 
 from urllib.parse import quote
 from PyQt5 import QtGui
@@ -59,7 +57,10 @@ class PoRunner(object):
             None
         """
         self.ui.cbBasemap.toggled.connect(self.showBasemap)
-        self.ui.pbLoad.clicked.connect(self.doLoadGraph)
+        self.ui.pbLoad.clicked.connect(self.loadGraph)
+        self.ui.pbLoadStations.clicked.connect(self.loadStations)
+        self.ui.pbLoadCurrentW.clicked.connect(self.loadCurrentW)
+
 
     def showBasemap(self):
         """
@@ -80,7 +81,7 @@ class PoRunner(object):
                     print("Layer '%s' not valid"%water_lines)
                     return
                 self.layers["water_lines"] = vlayer
-                self.layers["water_lines"].willBeDeleted.connect(self.doDisconnectWaterLines)
+                self.layers["water_lines"].willBeDeleted.connect(self.disconnectWaterLines)
                 QgsProject.instance().addMapLayer(vlayer, False)
                 layerTree = self.iface.layerTreeCanvasBridge().rootGroup()
                 layerTree.insertChildNode(-1, QgsLayerTreeLayer(vlayer))
@@ -93,7 +94,7 @@ class PoRunner(object):
                     print("Layer '%s' not valid"%water_areas)
                     return
                 self.layers["water_areas"] = vlayer
-                self.layers["water_areas"].willBeDeleted.connect(self.doDisconnectWaterAreas)
+                self.layers["water_areas"].willBeDeleted.connect(self.disconnectWaterAreas)
                 QgsProject.instance().addMapLayer(vlayer, False)
                 layerTree = self.iface.layerTreeCanvasBridge().rootGroup()
                 layerTree.insertChildNode(-1, QgsLayerTreeLayer(vlayer))
@@ -137,7 +138,65 @@ class PoRunner(object):
 
         self.ui.cbStations.setCurrentIndex(0)
 
-    def doLoadGraph(self):
+    def loadStations(self):
+        """
+
+        Args:
+            None
+        Returns:
+            None
+        """
+        po = PoQgsStations()
+        features = po.getFeatures()
+        fields = po.fields
+        crs = po.crs
+
+        layer_uri = "Point?crs=%s"%crs.authid()
+        vl = QgsVectorLayer(layer_uri, "Stations", "memory")
+
+        # Provider = Dateiebene
+        pr = vl.dataProvider()
+        pr.addAttributes(fields)
+        pr.addFeatures(features)
+        # layer-Informationen aktualisieren
+        vl.updateFields()
+        vl.updateExtents()
+        e = vl.extent()
+
+        # Layer anzeigen
+        QgsProject.instance().addMapLayer(vl)
+
+
+
+    def loadCurrentW(self):
+        """
+
+        Args:
+            None
+        Returns:
+            None
+        """
+        po = PoQgsCurrentW()
+        features = po.getFeatures()
+        fields = po.fields
+        crs = po.crs
+
+        layer_uri = "Point?crs=%s"%crs.authid()
+        vl = QgsVectorLayer(layer_uri, "Stations", "memory")
+
+        # Provider = Dateiebene
+        pr = vl.dataProvider()
+        pr.addAttributes(fields)
+        pr.addFeatures(features)
+        # layer-Informationen aktualisieren
+        vl.updateFields()
+        vl.updateExtents()
+        e = vl.extent()
+
+        # Layer anzeigen
+        QgsProject.instance().addMapLayer(vl)
+
+    def loadGraph(self):
 
         """
 
@@ -171,8 +230,8 @@ class PoRunner(object):
         self.ui.lbGraph.setPixmap(pixmap)
         self.ui.lbGraph.resize(pixmap.width(), pixmap.height())
 
-    def doDisconnectWaterLines(self):
+    def disconnectWaterLines(self):
         self.layers["water_lines"] = None
 
-    def doDisconnectWaterAreas(self):
+    def disconnectWaterAreas(self):
         self.layers["water_areas"] = None

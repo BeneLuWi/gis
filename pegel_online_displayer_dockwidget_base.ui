@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>325</width>
-    <height>144</height>
+    <height>181</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -93,7 +93,41 @@
      </layout>
     </item>
     <item row="2" column="0">
-     <layout class="QVBoxLayout" name="vlayout_layers"/>
+     <layout class="QVBoxLayout" name="vlayout_layers">
+      <property name="bottomMargin">
+       <number>13</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="hLayout_layerbuttons">
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="pbLoadStations">
+          <property name="text">
+           <string>Stationen laden</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pbLoadCurrentW">
+          <property name="text">
+           <string>Wasserstände laden</string>
+          </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="default">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
     </item>
     <item row="3" column="0">
      <layout class="QVBoxLayout" name="vlayout_map">
