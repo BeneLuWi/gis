@@ -7,7 +7,7 @@
 # Created:     21.08.2019
 #-------------------------------------------------------------------------------
 
-from pomodules.postations import PoStations
+from .postations import PoStations
 from qgis.PyQt.QtCore import QVariant
 from qgis.core import  (QgsField,
                         QgsFields,

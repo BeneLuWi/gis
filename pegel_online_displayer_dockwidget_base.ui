@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>325</width>
-    <height>181</height>
+    <height>259</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -134,6 +134,9 @@
       <property name="topMargin">
        <number>0</number>
       </property>
+      <property name="bottomMargin">
+       <number>10</number>
+      </property>
       <item>
        <widget class="QLabel" name="lbBasemap">
         <property name="text">
@@ -148,6 +151,39 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QRadioButton" name="rbStyleT">
+        <property name="text">
+         <string>Trend</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">bgStyleCurrentW</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="rbStyleM">
+        <property name="text">
+         <string>zu mittlerem, niedrigem und hohem Pegel</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">bgStyleCurrentW</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="rbStyleN">
+        <property name="text">
+         <string>zum absolut niedrigstem und höchstem Pegel</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">bgStyleCurrentW</string>
+        </attribute>
+       </widget>
+      </item>
      </layout>
     </item>
    </layout>
@@ -155,4 +191,7 @@
  </widget>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="bgStyleCurrentW"/>
+ </buttongroups>
 </ui>

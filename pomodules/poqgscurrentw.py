@@ -7,7 +7,7 @@
 # Created:     21.08.2019
 #-------------------------------------------------------------------------------
 
-from pomodules.pocurrentw import PoCurrentW
+from .pocurrentw import PoCurrentW
 from qgis.PyQt.QtCore import QVariant
 from qgis.core import  (QgsField,
                         QgsFields,
@@ -20,7 +20,7 @@ class PoQgsCurrentW(PoCurrentW):
     """
     """
     def __init__(self):
-        super(PoQgsStations, self).__init__()
+        super(PoQgsCurrentW, self).__init__()
 
         self.fields = None
         self.crs = None

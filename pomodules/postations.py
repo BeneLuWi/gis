@@ -7,7 +7,7 @@
 # Created:     21.08.2019
 #-------------------------------------------------------------------------------
 
-from pomodules.urlreader import UrlReader
+from .urlreader import UrlReader
 
 
 class PoStations(object):
@@ -29,7 +29,7 @@ class PoStations(object):
                             longname,
                             km,
                             agency,
-                            water.longname
+                            longname
                           )
             }
 

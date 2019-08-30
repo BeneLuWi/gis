@@ -7,7 +7,7 @@
 # Created:     21.08.2019
 #-------------------------------------------------------------------------------
 
-from pomodules.urlreader import UrlReader
+from .urlreader import UrlReader
 
 
 class PoCurrentW(object):
