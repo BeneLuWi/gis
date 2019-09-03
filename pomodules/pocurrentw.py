@@ -26,8 +26,11 @@ class PoCurrentW(object):
             'attributes': ( uuid,
                             number,
                             shortname,
-                            longname,
-                            km,
+                            timestamp,
+                            value,
+                            trend,
+                            stateMnwMhw,
+                            stateNswHsw
                             agency,
                             water.longname
                           )
@@ -59,7 +62,9 @@ class PoCurrentW(object):
                                 d['timeseries'][0]['currentMeasurement']['value'],
                                 d['timeseries'][0]['currentMeasurement']['trend'],
                                 d['timeseries'][0]['currentMeasurement']['stateMnwMhw'],
-                                d['timeseries'][0]['currentMeasurement']['stateNswHsw'])
+                                d['timeseries'][0]['currentMeasurement']['stateNswHsw'],
+                                d['agency'] if "agency" in d else "",
+                                d['water']['longname'] if "water" in d else "")
             }
 
             stations.append(station)

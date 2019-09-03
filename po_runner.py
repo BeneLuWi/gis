@@ -12,7 +12,10 @@ from .pomodules.poqgscurrentw import PoQgsCurrentW
 from .pomodules.urlreader import UrlReader
 
 from urllib.parse import quote
+from qgis.PyQt.QtWidgets import (QToolButton, QFrame)
+
 from PyQt5 import QtGui
+
 import os
 from qgis.core import  (QgsVectorLayer,
                         QgsProject,
@@ -20,8 +23,10 @@ from qgis.core import  (QgsVectorLayer,
 
 
 class PoRunner(object):
+    """Class to orchestrate the different ui elements
+    of the Pegel Online Displayer
     """
-    """
+
     def __init__(self, ui, iface):
         self.ui = ui
         self.iface = iface
@@ -34,7 +39,7 @@ class PoRunner(object):
 #-------------------------------------------------------------------------------
 
     def initUi(self):
-        """
+        """Initialize ui and layer dictionary
 
         Args:
             None
@@ -54,14 +59,14 @@ class PoRunner(object):
         self.data = ur.getJsonResponse()
         self.setStations(self.data)
 
+        self.initToolbox()
         self.initConnects()
-
         self.toggleStyleButtons(False)
 
 
 
     def initConnects(self):
-        """
+        """Connects the ui signals to functions
 
         Args:
             None
@@ -75,6 +80,41 @@ class PoRunner(object):
         self.ui.bgStyleCurrentW.buttonClicked.connect(self.changeCurrentWStlye)
 
 
+    def initToolbox(self):
+        """Creates the toolbox in the windget and assigns the functions
+        """
+
+        # Zoom to Full Extent
+        button = QToolButton()
+        button.setDefaultAction(self.iface.actionZoomFullExtent())
+        self.ui.hlayout_tools.insertWidget(0, button)
+
+        # Zoom to Selection
+        button = QToolButton()
+        button.setDefaultAction(self.iface.actionZoomToSelected())
+        self.ui.hlayout_tools.insertWidget(0, button)
+
+        # Spacer for zoom and selection
+        vLine = QFrame()
+        vLine.setFrameShape(QFrame.VLine)
+        vLine.setFrameShadow(QFrame.Sunken)
+        self.ui.hlayout_tools.insertWidget(0, vLine)
+
+        # Select the rectangle selection tool
+        button = QToolButton()
+        button.setDefaultAction(self.iface.actionSelectRectangle())
+        self.ui.hlayout_tools.insertWidget(0, button)
+
+        # Remove selection
+        button = QToolButton()
+        for a in self.iface.attributesToolBar().actions():
+          if a.objectName() == 'mActionDeselectAll':
+            button.setDefaultAction(a)
+            break
+        self.ui.hlayout_tools.insertWidget(0, button)
+
+
+
 #-------------------------------------------------------------------------------
 #
 # USER INTERACTION
@@ -82,23 +122,29 @@ class PoRunner(object):
 #-------------------------------------------------------------------------------
 
     def selectStations(self, selection):
+        """Gets the features for the selected stations
+        and passes them to the graph section of the widget
 
+        Args:
+            selection: List of selected Objects in the layer
+        Returns:
+            None
+        """
         stations = []
 
         for id in selection:
             stations.append(self.layers["currentW"].getFeature(id))
 
-        for feature in self.layers["currentW"].getSelectedFeatures():
-            stations.append(feature)
-
         self.setStations(stations)
 
 
+
+
     def changeCurrentWStlye(self, button):
-        """
+        """Changes the displayed information of the current water level
 
         Args:
-            None
+            button: selcted radio button from the style button group
         Returns:
             None
         """
@@ -118,14 +164,27 @@ class PoRunner(object):
         if styleToLoad is None:
             return
 
+        self.loadStyle(styleToLoad)
+
+
+    def loadStyle(self, styleToLoad):
+        """Changes the style of the layer and refreshes it afterwards
+
+        Args:
+            styleToLoad: filename of the style to be applied
+        Returns:
+            None
+        """
         self.layers["currentW"].loadNamedStyle(
-                                os.path.join(self.styleDir, styleToLoad)
+                                    os.path.join(self.styleDir, styleToLoad)
                                 )
         self.layerRefresh(self.layers["currentW"])
 
 
     def showBasemap(self):
-        """
+        """Toggles the basemap layer
+
+        When off, the map is not deleted but set invisible
 
         Args:
             None
@@ -186,21 +245,23 @@ class PoRunner(object):
                     .setItemVisibilityChecked(False))
 
     def setStations(self, stations):
-        """
+        """Assigns a list of stations to the select box of the graph section
+        of the widget
 
         Args:
-            None
+            stations: list of dictionaries containing the staions to be displayed
         Returns:
             None
         """
-        print(stations)
 
         self.ui.cbStations.clear()
+
         for e in stations:
             name = e['shortname']
             self.ui.cbStations.addItem(name)
 
-        self.ui.cbStations.setCurrentIndex(0)
+        if len(stations) > 0:
+            self.ui.cbStations.setCurrentIndex(0)
 
     def loadStations(self):
         """
@@ -326,6 +387,10 @@ class PoRunner(object):
         else:
             self.iface.mapCanvas().refresh()
 
+    def toggleLabelButtons(self, newState):
+        self.ui.rbLabelValue.setEnabled(newState)
+        self.ui.rbLabelName.setEnabled(newState)
+
     def toggleStyleButtons(self, newState):
         self.ui.rbStyleT.setEnabled(newState)
         self.ui.rbStyleN.setEnabled(newState)
@@ -333,6 +398,7 @@ class PoRunner(object):
 
     def disconnectStations(self):
         self.layers["stations"] = None
+        self.setStations([])
 
     def disconnectCurrentW(self):
         self.layers["currentW"] = None

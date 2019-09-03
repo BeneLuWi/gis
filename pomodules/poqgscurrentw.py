@@ -43,7 +43,8 @@ class PoQgsCurrentW(PoCurrentW):
                         'uuid', 'number',
                         'shortname', 'timestamp',
                         'value', 'trend',
-                        'stateMnwMhw', 'stateNswHsw'
+                        'stateMnwMhw', 'stateNswHsw',
+                        "agency", "water"
                         )
 
         self.fields = QgsFields()
@@ -55,6 +56,8 @@ class PoQgsCurrentW(PoCurrentW):
         self.fields.append(QgsField("trend" , QVariant.Int))
         self.fields.append(QgsField("stateMnwMhw" , QVariant.String ))
         self.fields.append(QgsField("stateNswHsw" , QVariant.String ))
+        self.fields.append(QgsField("agency" , QVariant.String ))
+        self.fields.append(QgsField("water" , QVariant.String ))
 
         # Verarbeitung
         features = []
