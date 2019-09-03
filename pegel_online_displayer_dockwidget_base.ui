@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>325</width>
-    <height>259</height>
+    <height>412</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,57 @@
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="4" column="0">
+    <item row="2" column="0">
+     <layout class="QVBoxLayout" name="vlayout_map">
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>10</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Anzeige für Wasserstände</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="rbStyleT">
+        <property name="text">
+         <string>Trend</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">bgStyleCurrentW</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="rbStyleM">
+        <property name="text">
+         <string>zu mittlerem, niedrigem und hohem Pegel</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">bgStyleCurrentW</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="rbStyleN">
+        <property name="text">
+         <string>zum absolut niedrigstem und höchstem Pegel</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">bgStyleCurrentW</string>
+        </attribute>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="5" column="0">
      <layout class="QVBoxLayout" name="vlayout_graph">
       <property name="spacing">
        <number>6</number>
@@ -92,23 +142,23 @@
       </item>
      </layout>
     </item>
-    <item row="2" column="0">
+    <item row="1" column="0">
      <layout class="QVBoxLayout" name="vlayout_layers">
       <property name="bottomMargin">
-       <number>13</number>
+       <number>0</number>
       </property>
+      <item>
+       <widget class="QLabel" name="lbLayers">
+        <property name="text">
+         <string>Daten von Pegel Online</string>
+        </property>
+       </widget>
+      </item>
       <item>
        <layout class="QHBoxLayout" name="hLayout_layerbuttons">
         <property name="bottomMargin">
          <number>0</number>
         </property>
-        <item>
-         <widget class="QPushButton" name="pbLoadStations">
-          <property name="text">
-           <string>Stationen laden</string>
-          </property>
-         </widget>
-        </item>
         <item>
          <widget class="QPushButton" name="pbLoadCurrentW">
           <property name="text">
@@ -125,18 +175,104 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QPushButton" name="pbLoadStations">
+          <property name="text">
+           <string>Stationen laden</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>
     </item>
-    <item row="3" column="0">
-     <layout class="QVBoxLayout" name="vlayout_map">
-      <property name="topMargin">
+    <item row="0" column="0">
+     <layout class="QHBoxLayout" name="hlayout_tools">
+      <property name="bottomMargin">
        <number>0</number>
       </property>
+      <item>
+       <spacer name="spacerTools">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QgsFilterLineEdit" name="leStationSearch">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="placeholderText">
+         <string>Suche Station</string>
+        </property>
+        <property name="clearButtonEnabled">
+         <bool>true</bool>
+        </property>
+        <property name="clearMode">
+         <enum>QgsFilterLineEdit::ClearToNull</enum>
+        </property>
+        <property name="showSearchIcon">
+         <bool>true</bool>
+        </property>
+        <property name="qgisRelation" stdset="0">
+         <string notr="true"/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="3" column="0">
+     <layout class="QVBoxLayout" name="vlayout_labels">
       <property name="bottomMargin">
-       <number>10</number>
+       <number>6</number>
       </property>
+      <item>
+       <widget class="QCheckBox" name="cbLabels">
+        <property name="text">
+         <string>Beschriftungen für Wasserstände anzeigen</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="rbLabelValues">
+        <property name="text">
+         <string>Werte</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">bgLabelCurrentW</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="rbLabelNames">
+        <property name="text">
+         <string>Stationsnamen</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">bgLabelCurrentW</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="rbLabelMapTips">
+        <property name="text">
+         <string>Map Tips</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">bgLabelCurrentW</string>
+        </attribute>
+       </widget>
+      </item>
       <item>
        <widget class="QLabel" name="lbBasemap">
         <property name="text">
@@ -151,47 +287,22 @@
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QRadioButton" name="rbStyleT">
-        <property name="text">
-         <string>Trend</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-        <attribute name="buttonGroup">
-         <string notr="true">bgStyleCurrentW</string>
-        </attribute>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="rbStyleM">
-        <property name="text">
-         <string>zu mittlerem, niedrigem und hohem Pegel</string>
-        </property>
-        <attribute name="buttonGroup">
-         <string notr="true">bgStyleCurrentW</string>
-        </attribute>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="rbStyleN">
-        <property name="text">
-         <string>zum absolut niedrigstem und höchstem Pegel</string>
-        </property>
-        <attribute name="buttonGroup">
-         <string notr="true">bgStyleCurrentW</string>
-        </attribute>
-       </widget>
-      </item>
      </layout>
     </item>
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QgsFilterLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>qgsfilterlineedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
  <buttongroups>
   <buttongroup name="bgStyleCurrentW"/>
+  <buttongroup name="bgLabelCurrentW"/>
  </buttongroups>
 </ui>
