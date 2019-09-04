@@ -39,11 +39,6 @@ class PoRunner(object):
 
     def initUi(self):
         """Initialize ui and layer dictionary
-
-        Args:
-            None
-        Returns:
-            None
         """
         self.layers = dict.fromkeys(
                 ["water_lines", "water_areas",
@@ -55,10 +50,12 @@ class PoRunner(object):
 
 
         ur = UrlReader("stations.json")
-        self.data = ur.getJsonResponse()
-        self.setStations(self.data)
+        data = ur.getJsonResponse()
+        self.setStations(data)
 
-        self.initToolbox()
+
+
+        self.initToolbox(data)
         self.initConnects()
         self.toggleStyleButtons(False)
         self.toggleLabelButtons(False)
@@ -69,11 +66,6 @@ class PoRunner(object):
 
     def initConnects(self):
         """Connects the ui signals to functions
-
-        Args:
-            None
-        Returns:
-            None
         """
         self.ui.cbBasemap.toggled.connect(self.showBasemap)
         self.ui.pbLoad.clicked.connect(self.loadGraph)
@@ -85,7 +77,7 @@ class PoRunner(object):
         self.ui.leStationSearch.returnPressed.connect(self.searchStation)
 
 
-    def initToolbox(self):
+    def initToolbox(self, stations):
         """Creates the toolbox in the windget and assigns the functions
         """
 
@@ -105,11 +97,6 @@ class PoRunner(object):
         vLine.setFrameShadow(QFrame.Sunken)
         self.ui.hlayout_tools.insertWidget(0, vLine)
 
-        # Select the rectangle selection tool
-        button = QToolButton()
-        button.setDefaultAction(self.iface.actionSelectRectangle())
-        self.ui.hlayout_tools.insertWidget(0, button)
-
         # Remove selection
         button = QToolButton()
         for a in self.iface.attributesToolBar().actions():
@@ -118,11 +105,20 @@ class PoRunner(object):
             break
         self.ui.hlayout_tools.insertWidget(0, button)
 
+        # Select the rectangle selection tool
+        button = QToolButton()
+        button.setDefaultAction(self.iface.actionSelectRectangle())
+        self.ui.hlayout_tools.insertWidget(0, button)
+
         # Create completer for search bar
+        list = []
+        for station in stations:
+            list.append(station["shortname"])
         model = QStringListModel()
-        model.setStringList(['some', 'words', 'in', 'my', 'dictionary'])
+        model.setStringList(list)
         completer = QCompleter()
         completer.setModel(model)
+        completer.setCaseSensitivity(0) # Case insensitive
 
         self.ui.leStationSearch.setCompleter(completer)
 
@@ -134,6 +130,7 @@ class PoRunner(object):
 #
 #-------------------------------------------------------------------------------
 
+#-------------------------------------------------------------------------------
 #
 #   GRAPH SECTION
 #
@@ -144,8 +141,6 @@ class PoRunner(object):
 
         Args:
             selection: List of selected Objects in the layer
-        Returns:
-            None
         """
         stations = []
 
@@ -160,8 +155,6 @@ class PoRunner(object):
 
         Args:
             stations: list of dictionaries containing the staions to be displayed
-        Returns:
-            None
         """
 
         self.ui.cbStations.clear()
@@ -176,11 +169,6 @@ class PoRunner(object):
     def loadGraph(self):
         """Gets the currently selected station from the select box and creates
         the graphic to be displayed in the widget
-
-        Args:
-            None
-        Returns:
-            None
         """
         # Anzahl der Tage in der SpinBox
         days = days = self.ui.sbDays.value()
@@ -211,17 +199,13 @@ class PoRunner(object):
         self.ui.lbGraph.setPixmap(pixmap)
         self.ui.lbGraph.resize(pixmap.width(), pixmap.height())
 
+#-------------------------------------------------------------------------------
 #
 #   CURRENT WATERLEVEL LAYER
 #
 
     def loadCurrentW(self):
-        """
-
-        Args:
-            None
-        Returns:
-            None
+        """Load and create the current-waterlevel layer
         """
 
         if not (self.layers["currentW"] is None):
@@ -264,8 +248,6 @@ class PoRunner(object):
 
         Args:
             button: selcted radio button from the style button group
-        Returns:
-            None
         """
         if self.layers["currentW"] is None:
             return
@@ -282,13 +264,13 @@ class PoRunner(object):
 
         if not (styleToLoad is None):
             self.loadStyle(styleToLoad)
+            self.ui.bgLabelCurrentW.buttonClicked.emit(
+                self.ui.bgLabelCurrentW.checkedButton()
+            )
+
 
     def toggleLabels(self):
-        """
-        Args:
-            None
-        Returns:
-            None
+        """Enable or disable and remove labels from the current-waterlevel layer
         """
         if self.layers["currentW"] is None:
             return
@@ -306,10 +288,8 @@ class PoRunner(object):
 
         Args:
             button: selcted radio button from the style button group
-        Returns:
-            None
         """
-        if self.layers["currentW"] is None:
+        if self.layers["currentW"] is None or button is None:
             return
 
         # Load the chosen
@@ -336,15 +316,13 @@ class PoRunner(object):
 
         Args:
             styleToLoad: filename of the style to be applied
-        Returns:
-            None
         """
         self.layers["currentW"].loadNamedStyle(
                                     os.path.join(self.styleDir, styleToLoad)
                                     )
         self.layerRefresh(self.layers["currentW"])
 
-
+#-------------------------------------------------------------------------------
 #
 #   BASE MAP
 #
@@ -353,11 +331,6 @@ class PoRunner(object):
         """Toggles the basemap layer
 
         When off, the map is not deleted but set invisible
-
-        Args:
-            None
-        Returns:
-            None
         """
 
         # Create the layers only if clicked to improve loading time of the plugin
@@ -423,17 +396,13 @@ class PoRunner(object):
                     .findLayer(self.layers["water_areas"].id())
                     .setItemVisibilityChecked(False))
 
+#-------------------------------------------------------------------------------
 #
 #   STATIONS LAYER
 #
 
     def loadStations(self):
-        """
-
-        Args:
-            None
-        Returns:
-            None
+        """Create and display the stations layer
         """
 
         if not (self.layers["stations"] is None):
@@ -465,12 +434,9 @@ class PoRunner(object):
 
 
     def searchStation(self):
-        """
-
-        Args:
-            None
-        Returns:
-            None
+        """Search for station in the currently selected layer, if it's either
+        the stations or the current-waterlevel layer. If found, select the
+        corresponding feature and make it available in the graph section
         """
 
         search = self.ui.leStationSearch.text()
@@ -478,7 +444,8 @@ class PoRunner(object):
         if len(search) == 0:
             return
 
-        if not (self.layers["stations"] is None):
+        if (not (self.layers["stations"] is None)
+                and self.iface.activeLayer().name() == "Stationen"):
             # Search through all the features
             for feat in self.layers["stations"].getFeatures():
                 if search.lower() == feat["shortname"].lower():
@@ -490,9 +457,11 @@ class PoRunner(object):
                     # Select and zoom
                     self.layers["stations"].select([feat.id()])
                     self.iface.actionZoomToSelected().trigger()
+                    self.setStations([feat])
                     return
 
-        if not (self.layers["currentW"] is None):
+        if (not (self.layers["currentW"] is None)
+                and self.iface.activeLayer().name() == "Wasserstände"):
             # Search through all the features
             for feat in self.layers["currentW"].getFeatures():
                 if search.lower() == feat["shortname"].lower():
@@ -504,6 +473,7 @@ class PoRunner(object):
                     # Select and zoom
                     self.layers["currentW"].select([feat.id()])
                     self.iface.actionZoomToSelected().trigger()
+                    self.setStations([feat])
 
 
 #-------------------------------------------------------------------------------

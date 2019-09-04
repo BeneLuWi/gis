@@ -21,9 +21,10 @@
  *                                                                         *
  ***************************************************************************/
 """
-from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, Qt
+from qgis.PyQt.QtCore import (QSettings, QTranslator,
+                              QCoreApplication, Qt)
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction
+from qgis.PyQt.QtWidgets import QAction, QMessageBox, QInputDialog
 # Initialize Qt resources from file resources.py
 from .resources import *
 
@@ -169,19 +170,31 @@ class PegelOnlineDisplayer:
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
-        icon_path = ':/plugins/pegel_online_displayer/icon.png'
+        icon_path = os.path.join(
+                os.path.dirname(os.path.realpath(__file__)), "icon.png"
+                )
+
         self.add_action(
             icon_path,
             text=self.tr(u'Dock-Widget anzeigen'),
             callback=self.run,
             parent=self.iface.mainWindow())
 
+        self.add_action(
+            icon_path,
+            text=self.tr(u'How To'),
+            callback=self.showHowTo,
+            parent=self.iface.mainWindow())
+
+        self.add_action(
+            icon_path,
+            text=self.tr(u'Über'),
+            callback=self.showAbout,
+            parent=self.iface.mainWindow())
     #--------------------------------------------------------------------------
 
     def onClosePlugin(self):
         """Cleanup necessary items here when plugin dockwidget is closed"""
-
-        #print "** CLOSING PegelOnlineDisplayer"
 
         # disconnects
         self.dockwidget.closingPlugin.disconnect(self.onClosePlugin)
@@ -216,8 +229,6 @@ class PegelOnlineDisplayer:
         if not self.pluginIsActive:
             self.pluginIsActive = True
 
-            #print "** STARTING PegelOnlineDisplayer"
-
             # dockwidget may not exist if:
             #    first run of plugin
             #    removed on close (see self.onClosePlugin method)
@@ -230,15 +241,77 @@ class PegelOnlineDisplayer:
             # connect to provide cleanup on closing of dockwidget
             self.dockwidget.closingPlugin.connect(self.onClosePlugin)
 
+
+            # Select position of Dockwidget
+            options = ("links", "rechts", "oben", "unten")
+            posString, ok = QInputDialog.getItem(None,
+                                            "Pegel Online Dock-Widget",
+                                            "Wo soll angedockt werden?",
+                                            options, 0, False)
+            pos = Qt.LeftDockWidgetArea
+
+            if posString == "links":
+                pos = Qt.LeftDockWidgetArea
+            elif posString == "rechts":
+                pos = Qt.RightDockWidgetArea
+            elif posString == "oben":
+                pos = Qt.TopDockWidgetArea
+            elif posString == "unten":
+                pos = Qt.BottomDockWidgetArea
+
             # show the dockwidget
-            # TODO: fix to allow choice of dock location
-            self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockwidget)
+            self.iface.addDockWidget(pos, self.dockwidget)
             self.dockwidget.show()
 
+    def showHowTo(self):
+        """Shows a message box with usage instructions"""
+        content = """<h3>How To Pegel Online Displayer</h3>
+Im Pegel Online Displayer Widget gibt es drei Sektionen:
+<h4>Toolbox</h4>
+Auf der linken Seite finden sich verschiedene <strong>Auswahl- und Zoomtools</strong>
+für das jeweils ausgewählte Layer. <br/> Nachdem in einem der Tabs des Layermanagement
+entweder die Wasserstände oder die Stationen geladen wurden und eines dieser
+Layer ausgewählt ist, ist die <strong>Suchleiste</strong> auf der rechten Seite
+verfügbar. Hier können Stationen nach ihrem Namen gesucht werden. Nachdem eine
+der vorgeschlagenen Stationen ausgewählt wurde, kann mit ENTER bestätigt werden
+und es wird auf die ausgewählte Station gezoomt und diese ist in der
+Graphanzeige verfügbar.
+<hr>
+<h4>Layermanagement</h4>
+Das Layermanagement ist in Tabs aufgeteilt, in denen jeweils verschiedene
+Funktionen für die Layer verfügbar sind:
+<br><strong>Allgemein</strong><br>
+An- und Ausschalten der Basiskarte deutscher Gewässer
+<br><strong>Wasserstände</strong><br>
+Laden der Daten der Wasserstände von Pegel Online, Anzeigen verschiedener
+Datensätze und Entwicklung des Wasserstandes, An- und Ausschalten und Auswahl
+verschiedener Labels
+<br><strong>Stationen</strong><br>
+Laden von Stationen von Pegel Online
+<hr>
+<h4>Graphanzeige</h4>
+Im Stationen Dropdown können zunächst alle, dann die aktuell im Layer markierten
+Stationen ausgewählt werden. Zu diesen Stationen kann dann der Verlaufsgraph
+des Wasserstandes der letzte 1-30 Tage geladen werden.
+<hr>
+        """
+        howto = QMessageBox.information(None, "How To", content)
 
 
-
-
+    def showAbout(self):
+        """Shows a message box with information about the plugin"""
+        content = """<h3>Über</h3>
+Mit dem Pegel Online Displayer können Daten der Messstationen an
+deutschen Gewässern werden. Die Daten werden von der
+<a href="https://www.pegelonline.wsv.de">Wasserstraßen- und Schifffahrtsverwaltung des Bundes </a>
+über eine Rest-API bereitgestellt und sind frei verfügbar. <br/>
+Der Code für das Plugin kann <a href="https://github.com/BeneLuWi/gis">hier</a>
+eingesehen werden.
+        """
+        howto = QMessageBox.information(
+                    None,
+                    "Über Pegel Online Displayer",
+                    content)
 
 
 

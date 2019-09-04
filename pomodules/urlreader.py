@@ -32,9 +32,6 @@ class UrlReader(object):
             URLError: An error occured when the URL cant be reached
             HTTPError: An error occured during the communication
         """
-
-
-
         reqUrl = urljoin(BASE_URL, self.url)
         req = urllib.request.Request(reqUrl)
         req.add_header('Accept-Encoding', 'gzip')
@@ -99,16 +96,3 @@ class UrlReader(object):
         if not (data is None):
             with open ("stations.json", "wb") as f:
                 f.write(data)
-
-    def getDataTable(jsdata, columns):
-        """Creates a list of values with specific columns
-
-        Args:
-            jsdata: Data to be parsed as a table
-            columns: Dictionary keys
-        Returns:
-            table: List of Dictionaries
-        """
-
-        pass
-
