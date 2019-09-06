@@ -265,48 +265,50 @@ class PegelOnlineDisplayer:
 
     def showHowTo(self):
         """Shows a message box with usage instructions"""
+
         content = """<h3>How To Pegel Online Displayer</h3>
-Im Pegel Online Displayer Widget gibt es drei Sektionen:
-<h4>Toolbox</h4>
-Auf der linken Seite finden sich verschiedene <strong>Auswahl- und Zoomtools</strong>
-für das jeweils ausgewählte Layer. <br/> Nachdem in einem der Tabs des Layermanagement
-entweder die Wasserstände oder die Stationen geladen wurden und eines dieser
-Layer ausgewählt ist, ist die <strong>Suchleiste</strong> auf der rechten Seite
-verfügbar. Hier können Stationen nach ihrem Namen gesucht werden. Nachdem eine
-der vorgeschlagenen Stationen ausgewählt wurde, kann mit ENTER bestätigt werden
-und es wird auf die ausgewählte Station gezoomt und diese ist in der
-Graphanzeige verfügbar.
-<hr>
-<h4>Layermanagement</h4>
-Das Layermanagement ist in Tabs aufgeteilt, in denen jeweils verschiedene
-Funktionen für die Layer verfügbar sind:
-<br><strong>Allgemein</strong><br>
-An- und Ausschalten der Basiskarte deutscher Gewässer
-<br><strong>Wasserstände</strong><br>
-Laden der Daten der Wasserstände von Pegel Online, Anzeigen verschiedener
-Datensätze und Entwicklung des Wasserstandes, An- und Ausschalten und Auswahl
-verschiedener Labels
-<br><strong>Stationen</strong><br>
-Laden von Stationen von Pegel Online
-<hr>
-<h4>Graphanzeige</h4>
-Im Stationen Dropdown können zunächst alle, dann die aktuell im Layer markierten
-Stationen ausgewählt werden. Zu diesen Stationen kann dann der Verlaufsgraph
-des Wasserstandes der letzte 1-30 Tage geladen werden.
-<hr>
+            Im Pegel Online Displayer Widget gibt es drei Sektionen:
+            <h4>Toolbox</h4>
+            Auf der linken Seite finden sich verschiedene <strong>Auswahl- und Zoomtools</strong>
+            für das jeweils ausgewählte Layer. <br/> Nachdem in einem der Tabs des Layermanagement
+            entweder die Wasserstände oder die Stationen geladen wurden und eines dieser
+            Layer ausgewählt ist, ist die <strong>Suchleiste</strong> auf der rechten Seite
+            verfügbar. Hier können Stationen nach ihrem Namen gesucht werden. Nachdem eine
+            der vorgeschlagenen Stationen ausgewählt wurde, kann mit ENTER bestätigt werden
+            und es wird auf die ausgewählte Station gezoomt und diese ist in der
+            Graphanzeige verfügbar.
+            <hr>
+            <h4>Layermanagement</h4>
+            Das Layermanagement ist in Tabs aufgeteilt, in denen jeweils verschiedene
+            Funktionen für die Layer verfügbar sind:
+            <br><strong>Allgemein</strong><br>
+            An- und Ausschalten der Basiskarte deutscher Gewässer
+            <br><strong>Wasserstände</strong><br>
+            Laden der Daten der Wasserstände von Pegel Online, Anzeigen verschiedener
+            Datensätze und Entwicklung des Wasserstandes, An- und Ausschalten und Auswahl
+            verschiedener Labels
+            <br><strong>Stationen</strong><br>
+            Laden von Stationen von Pegel Online
+            <hr>
+            <h4>Graphanzeige</h4>
+            Im Stationen Dropdown können zunächst alle, dann die aktuell im Layer markierten
+            Stationen ausgewählt werden. Zu diesen Stationen kann dann der Verlaufsgraph
+            des Wasserstandes der letzte 1-30 Tage geladen werden.
+            <hr>
         """
         howto = QMessageBox.information(None, "How To", content)
 
 
     def showAbout(self):
         """Shows a message box with information about the plugin"""
+
         content = """<h3>Über</h3>
-Mit dem Pegel Online Displayer können Daten der Messstationen an
-deutschen Gewässern werden. Die Daten werden von der
-<a href="https://www.pegelonline.wsv.de">Wasserstraßen- und Schifffahrtsverwaltung des Bundes </a>
-über eine Rest-API bereitgestellt und sind frei verfügbar. <br/>
-Der Code für das Plugin kann <a href="https://github.com/BeneLuWi/gis">hier</a>
-eingesehen werden.
+            Mit dem Pegel Online Displayer können Daten der Messstationen an
+            deutschen Gewässern werden. Die Daten werden von der
+            <a href="https://www.pegelonline.wsv.de">Wasserstraßen- und Schifffahrtsverwaltung des Bundes </a>
+            über eine Rest-API bereitgestellt und sind frei verfügbar. <br/>
+            Der Code für das Plugin kann <a href="https://github.com/BeneLuWi/gis">hier</a>
+            eingesehen werden.
         """
         howto = QMessageBox.information(
                     None,

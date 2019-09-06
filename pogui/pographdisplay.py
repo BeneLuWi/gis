@@ -12,13 +12,29 @@ from urllib.parse import quote
 from ..pomodules.urlreader import UrlReader
 
 class PoGraphdisplay(object):
+    """Loads and displays measurement graphs as image
+
+    Attributes:
+        ui: Ui object to reference the ui elements
+        iface: Reference to layers
+    """
 
     def __init__(self, ui, iface):
         self.iface = iface
         self.ui = ui
 
+#-------------------------------------------------------------------------------
+#
+# INITIALIZATION
+#
+
     def initConnections(self):
         self.ui.pbLoad.clicked.connect(self.loadGraph)
+
+#-------------------------------------------------------------------------------
+#
+# GRAPH DISPLAY
+#
 
     def setStations(self, stations):
         """Assigns a list of stations to the select box of the graph section

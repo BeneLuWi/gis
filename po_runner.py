@@ -13,7 +13,7 @@ from .pogui.pographdisplay import PoGraphdisplay
 from .pogui.polayers import PoLayermanagent
 
 class PoRunner(object):
-    """Class to orchestrate the different ui elements
+    """Orchestrates the different ui elements
     of the Pegel Online Displayer
     """
 
@@ -26,23 +26,20 @@ class PoRunner(object):
 #
 # INITIALIZATION
 #
-#-------------------------------------------------------------------------------
+
 
     def initUi(self):
-        """Initialize ui and layer dictionary
+        """Initialize ui
         """
-        self.layers = dict.fromkeys(
-                ["water_lines", "water_areas",
-                 "currentW", "stations"]
-            )
 
-        # Load station data
+        self.layers = dict.fromkeys([
+                            "water_lines", "water_areas",
+                            "currentW", "stations"
+                            ])
+
+        # Load station data for graph and search bar
         ur = UrlReader("stations.json")
         data = ur.getJsonResponse()
-
-        # Init and Connect Toolbox
-        self.toolBox = PoToolbox(self.ui, self.iface, data)
-        self.toolBox.initUi()
 
         # Init and Connect Graphdisplay Graphdisplay
         self.graphDisplay = PoGraphdisplay(self.ui, self.iface)
@@ -50,8 +47,18 @@ class PoRunner(object):
         self.graphDisplay.initConnections()
 
         # Init and Connect Layermanagement
-        self.layermanagement = PoLayermanagent(self.ui, self.iface,
-                                            self.layers, self.graphDisplay)
+        self.layermanagement = PoLayermanagent(self.ui,
+                                               self.iface,
+                                               self.layers,
+                                               self.graphDisplay)
         self.layermanagement.initUi()
         self.layermanagement.initConnects()
 
+        # Init and Connect Toolbox
+        self.toolBox = PoToolbox(self.ui,
+                                 self.iface,
+                                 data,
+                                 self.layers,
+                                 self.graphDisplay)
+        self.toolBox.initUi()
+        self.toolBox.initConnections()

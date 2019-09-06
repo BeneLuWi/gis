@@ -18,7 +18,13 @@ from qgis.core import  (QgsVectorLayer,
 
 
 class PoLayermanagent(object):
+    """Controls the different layers of the plugin
 
+    Attributes:
+        ui: Ui object to reference the ui elements
+        iface: Reference to layers
+        graphDisplay: Reference to the graph display section for search bar
+    """
     def __init__(self, ui, iface, layers, graphDisplay):
         self.iface = iface
         self.ui = ui
@@ -27,6 +33,8 @@ class PoLayermanagent(object):
 
         self.local_dir = os.path.dirname(os.path.realpath(__file__))
         self.styleDir = os.path.join(self.local_dir, "styles")
+
+
 
     def initUi(self):
         self.toggleStyleButtons(False)
@@ -40,8 +48,11 @@ class PoLayermanagent(object):
         self.ui.cbLabels.clicked.connect(self.toggleLabels)
         self.ui.bgStyleCurrentW.buttonClicked.connect(self.changeCurrentWStyle)
         self.ui.bgLabelCurrentW.buttonClicked.connect(self.changeCurrentWLabels)
-        self.ui.leStationSearch.returnPressed.connect(self.searchStation)
 
+#-------------------------------------------------------------------------------
+#
+#   LAYER INTERACTION
+#
 
     def selectStations(self, selection):
         """Gets the features for the selected stations
@@ -293,56 +304,11 @@ class PoLayermanagent(object):
         # Layer anzeigen
         QgsProject.instance().addMapLayer(vl)
 
-
-    def searchStation(self):
-        """Search for station in the currently selected layer, if it's either
-        the stations or the current-waterlevel layer. If found, select the
-        corresponding feature and make it available in the graph section
-        """
-
-        search = self.ui.leStationSearch.text()
-
-        if len(search) == 0:
-            return
-
-        if (not (self.layers["stations"] is None)
-                and self.iface.activeLayer().name() == "Stationen"):
-            # Search through all the features
-            for feat in self.layers["stations"].getFeatures():
-                if search.lower() == feat["shortname"].lower():
-                    # Remove previous selections
-                    for a in self.iface.attributesToolBar().actions():
-                      if a.objectName() == 'mActionDeselectAll':
-                        a.trigger()
-                        break
-                    # Select and zoom
-                    self.layers["stations"].select([feat.id()])
-                    self.iface.actionZoomToSelected().trigger()
-                    self.graphDisplay.setStations([feat])
-                    return
-
-        if (not (self.layers["currentW"] is None)
-                and self.iface.activeLayer().name() == "Wasserstände"):
-            # Search through all the features
-            for feat in self.layers["currentW"].getFeatures():
-                if search.lower() == feat["shortname"].lower():
-                    # Remove previous selections
-                    for a in self.iface.attributesToolBar().actions():
-                      if a.objectName() == 'mActionDeselectAll':
-                        a.trigger()
-                        break
-                    # Select and zoom
-                    self.layers["currentW"].select([feat.id()])
-                    self.iface.actionZoomToSelected().trigger()
-                    self.graphDisplay.setStations([feat])
-
-
-
 #-------------------------------------------------------------------------------
 #
 # HELPER
 #
-#-------------------------------------------------------------------------------
+
 
     def layerRefresh(self, lyr):
         if self.iface.mapCanvas().isCachingEnabled():
