@@ -34,3 +34,5 @@ def classFactory(iface):  # pylint: disable=invalid-name
     #
     from .pegel_online_displayer import PegelOnlineDisplayer
     return PegelOnlineDisplayer(iface)
+
+
