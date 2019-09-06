@@ -34,7 +34,10 @@ class PoLayermanagent(object):
         self.local_dir = os.path.dirname(os.path.realpath(__file__))
         self.styleDir = os.path.join(self.local_dir, "styles")
 
-
+#-------------------------------------------------------------------------------
+#
+# INITIALIZATION
+#
 
     def initUi(self):
         self.toggleStyleButtons(False)
