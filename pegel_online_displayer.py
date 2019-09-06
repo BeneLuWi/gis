@@ -169,25 +169,26 @@ class PegelOnlineDisplayer:
 
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
+        assets_path = os.path.join(
+                os.path.dirname(os.path.realpath(__file__)), "assets")
 
-        icon_path = os.path.join(
-                os.path.dirname(os.path.realpath(__file__)), "icon.png"
-                )
-
+        # Add Widget
         self.add_action(
-            icon_path,
+            os.path.join(assets_path, "icon.png"),
             text=self.tr(u'Dock-Widget anzeigen'),
             callback=self.run,
             parent=self.iface.mainWindow())
 
+        # Add How To Dialog
         self.add_action(
-            icon_path,
+            os.path.join(assets_path, "iconHowTo.png"),
             text=self.tr(u'How To'),
             callback=self.showHowTo,
             parent=self.iface.mainWindow())
 
+        # Add About dialog
         self.add_action(
-            icon_path,
+            os.path.join(assets_path, "iconAbout.png"),
             text=self.tr(u'Über'),
             callback=self.showAbout,
             parent=self.iface.mainWindow())
