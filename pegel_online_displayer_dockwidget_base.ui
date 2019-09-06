@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>334</width>
-    <height>491</height>
+    <height>532</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -71,7 +71,7 @@
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>260</height>
+        <height>272</height>
        </size>
       </property>
       <property name="currentIndex">
@@ -125,7 +125,7 @@
        <attribute name="title">
         <string>Wasserstände</string>
        </attribute>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -139,7 +139,7 @@
           <number>0</number>
          </property>
          <property name="bottomMargin">
-          <number>10</number>
+          <number>0</number>
          </property>
          <item>
           <widget class="QPushButton" name="pbLoadCurrentW">
