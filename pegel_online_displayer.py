@@ -228,6 +228,19 @@ class PegelOnlineDisplayer:
         """Run method that loads and starts the plugin"""
 
         if not self.pluginIsActive:
+
+            # Select position of Dockwidget
+            options = ("links", "rechts", "oben", "unten")
+            posString, ok = QInputDialog.getItem(None,
+                                                "Pegel Online Dock-Widget",
+                                                "Wo soll angedockt werden?",
+                                                options, 0, False)
+
+            # If Abbrechen is chosen, then abort
+            if ok == False:
+                return
+
+
             self.pluginIsActive = True
 
             # dockwidget may not exist if:
@@ -242,13 +255,6 @@ class PegelOnlineDisplayer:
             # connect to provide cleanup on closing of dockwidget
             self.dockwidget.closingPlugin.connect(self.onClosePlugin)
 
-
-            # Select position of Dockwidget
-            options = ("links", "rechts", "oben", "unten")
-            posString, ok = QInputDialog.getItem(None,
-                                            "Pegel Online Dock-Widget",
-                                            "Wo soll angedockt werden?",
-                                            options, 0, False)
             pos = Qt.LeftDockWidgetArea
 
             if posString == "links":
