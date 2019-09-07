@@ -2,6 +2,12 @@
 Programmcode für das Modul GIS-Anwendungsentwicklung im MSc Informatic SoSe19
 
 
+## Quick Start
+
+* Zip-Datei [hier](https://github.com/BeneLuWi/gis/releases/tag/v1.0) herunterladen und entpacken
+* Inhalt nach `pfad/zu/qgis-plugins` kopieren
+* QGIS starten
+
 ## Über
 
 Mit dem Pegel Online Displayer können Daten der Messstationen an deutschen Gewässern werden. Die Daten werden von der [Wasserstraßen- und Schifffahrtsverwaltung des Bundes](https://www.pegelonline.wsv.de) über eine Rest-API bereitgestellt und sind frei verfügbar.  
