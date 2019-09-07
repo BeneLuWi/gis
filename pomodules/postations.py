@@ -1,8 +1,8 @@
 #-------------------------------------------------------------------------------
 # Name:        PegelOnline Stations
-# Purpose:
+# Purpose:     Read and parse Pegel Online Data
 #
-# Author:      s4beluek
+# Author:      Benedikt Lüken-Winkels
 #
 # Created:     21.08.2019
 #-------------------------------------------------------------------------------
@@ -11,14 +11,14 @@ from .urlreader import UrlReader
 
 
 class PoStations(object):
-    """
+    """Read and parse the JSON-Data to Dictionaries
     """
 
     def __init__(self):
         pass
 
     def getData(self):
-        """
+        """Read and parse the JSON-Data to Dictionaries
 
         Station data has the form
         station = {
@@ -32,9 +32,6 @@ class PoStations(object):
                             longname
                           )
             }
-
-        Args:
-
         Returns:
             stations: List with Dictionary for each station
         """

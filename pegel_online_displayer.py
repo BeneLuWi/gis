@@ -229,7 +229,7 @@ class PegelOnlineDisplayer:
 
         if not self.pluginIsActive:
 
-            # Select position of Dockwidget
+            # Select if widget should be displayed and position of Dockwidget
             options = ("links", "rechts", "oben", "unten")
             posString, ok = QInputDialog.getItem(None,
                                                 "Pegel Online Dock-Widget",
@@ -239,7 +239,6 @@ class PegelOnlineDisplayer:
             # If Abbrechen is chosen, then abort
             if ok == False:
                 return
-
 
             self.pluginIsActive = True
 
@@ -317,10 +316,9 @@ class PegelOnlineDisplayer:
             Der Code für das Plugin kann <a href="https://github.com/BeneLuWi/gis">hier</a>
             eingesehen werden.
         """
-        howto = QMessageBox.information(
-                    None,
-                    "Über Pegel Online Displayer",
-                    content)
+        howto = QMessageBox.information(None,
+                                        "Über Pegel Online Displayer",
+                                        content)
 
 
 

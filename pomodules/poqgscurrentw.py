@@ -1,8 +1,8 @@
 #-------------------------------------------------------------------------------
-# Name:        POStations for QGIS
-# Purpose:
+# Name:        PoQgsCurrentW
+# Purpose:     Get current waterlevels from Pegel Online and create QGIS-Features
 #
-# Author:      s4beluek
+# Author:      Benedikt Lüken-Winkels
 #
 # Created:     21.08.2019
 #-------------------------------------------------------------------------------
@@ -17,7 +17,7 @@ from qgis.core import  (QgsField,
                         QgsCoordinateReferenceSystem)
 
 class PoQgsCurrentW(PoCurrentW):
-    """
+    """Gets current waterlevels from Pegel Online and creates QGIS-Features
     """
     def __init__(self):
         super(PoQgsCurrentW, self).__init__()
@@ -26,19 +26,16 @@ class PoQgsCurrentW(PoCurrentW):
         self.crs = None
 
     def getFeatures(self):
-        """
-
-        Args:
-
+        """Parses the Pegel Online waterlevel data to QgsFeature
         Returns:
-
+            features: QgsFeature of the PO waterlevel data
         """
 
         data = self.getData()
 
         self.crs = QgsCoordinateReferenceSystem(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
 
-        # Diese Fields anlegen:
+        # Fields for the features
         self.fnames = (
                         'uuid', 'number',
                         'shortname', 'timestamp',
@@ -59,7 +56,7 @@ class PoQgsCurrentW(PoCurrentW):
         self.fields.append(QgsField("agency" , QVariant.String ))
         self.fields.append(QgsField("water" , QVariant.String ))
 
-        # Verarbeitung
+        # Processing
         features = []
         for d in data:
             f = QgsFeature(self.fields)

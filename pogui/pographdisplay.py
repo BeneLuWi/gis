@@ -1,8 +1,8 @@
 #-------------------------------------------------------------------------------
-# Name:        module1
-# Purpose:
+# Name:        PoGraphdisplay
+# Purpose:     Loads and displays measurement graphs as image in the widget
 #
-# Author:      bluek
+# Author:      Benedikt Lüken-Winkels
 #
 # Created:     23.08.2019
 #-------------------------------------------------------------------------------

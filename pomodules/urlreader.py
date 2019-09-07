@@ -1,8 +1,8 @@
 #-------------------------------------------------------------------------------
-# Name:        URL Reader
+# Name:        UrlReader
 # Purpose:     Class to get and Parse data for PegelOnline Plugin
 #
-# Author:      s4beluek
+# Author:      Benedikt Lüken-Winkels
 #
 # Created:     21.08.2019
 #-------------------------------------------------------------------------------
@@ -23,9 +23,6 @@ class UrlReader(object):
 
     def openUrl(self):
         """Creates and executes HTTP-request
-
-        Args:
-            None
         Returns:
             response of the HTTP-request as gzip
         Raises:
@@ -47,9 +44,6 @@ class UrlReader(object):
 
     def getDataResponse(self):
         """Unzips and returns data received from openUrl if present
-
-        Args:
-            None
         Returns:
             data: Raw unzipped data
         """
@@ -68,9 +62,6 @@ class UrlReader(object):
 
     def getJsonResponse(self):
         """Creates and returns data from PegelOnline as JSON
-
-        Args:
-            None
         Returns:
             data: Data received from getDataResponse() as JSON
         """
@@ -85,11 +76,6 @@ class UrlReader(object):
 
     def getFileResponse(self):
         """Saves the fetched data from PegelOnline as json file 'stations.json'
-
-        Args:
-            None
-        Returns:
-            None
         """
         data = self.getDataResponse()
 

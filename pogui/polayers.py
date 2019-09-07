@@ -1,8 +1,8 @@
 #-------------------------------------------------------------------------------
-# Name:        module1
-# Purpose:
+# Name:        PoLayermanagent
+# Purpose:     Creates the Layers and handles changes to them
 #
-# Author:      bluek
+# Author:      Benedikt Lüken-Winkels
 #
 # Created:     23.08.2019
 #-------------------------------------------------------------------------------
@@ -239,7 +239,7 @@ class PoLayermanagent(object):
         if self.layers["currentW"] is None or button is None:
             return
 
-        # Load the chosen
+        # Load the chosen label
         selected = button.objectName()
         styleToLoad = None
 
@@ -309,7 +309,7 @@ class PoLayermanagent(object):
 
 #-------------------------------------------------------------------------------
 #
-# HELPER
+# HELPERS (do what their names say)
 #
 
 

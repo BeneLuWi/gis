@@ -1,8 +1,8 @@
 #-------------------------------------------------------------------------------
-# Name:        module1
-# Purpose:
+# Name:        PoToolbox
+# Purpose:     Initialize the toolbox for the widget
 #
-# Author:      bluek
+# Author:      Benedikt Lüken-Winkels
 #
 # Created:     23.08.2019
 #-------------------------------------------------------------------------------

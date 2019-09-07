@@ -1,8 +1,8 @@
 #-------------------------------------------------------------------------------
 # Name:        PoRunner
-# Purpose:
+# Purpose:     Initialize and orchestrate the different ui elements
 #
-# Author:      bluek
+# Author:      Benedikt Lüken-Winkels
 #
 # Created:     23.08.2019
 #-------------------------------------------------------------------------------
